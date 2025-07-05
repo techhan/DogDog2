@@ -26,9 +26,13 @@ public enum ErrorCode {
     CATEGORY_HAS_CHILDREN("하위 카테고리가 존재하여 삭제할 수 없습니다.", HttpStatus.CONFLICT),
     CATEGORY_HAS_PRODUCTS("카테고리에 상품이 존재하여 삭제할 수 없습니다.", HttpStatus.CONFLICT),
 
+    // == Cart ==
+    NOT_FOUND_CART("장바구니가 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
+    NOT_FOUND_CART_ITEM("삭제하는 아이템이 장바구니에 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
+    CART_ITEM_NOT_BELONG_TO_MEMBER("해당 회원의 장바구니가 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
+
     // == validation error 공통화 ==
-    INVALID_INPUT_VALUE("잘못된 입력입니다.", HttpStatus.BAD_REQUEST)
-    ;
+    INVALID_INPUT_VALUE("잘못된 입력입니다.", HttpStatus.BAD_REQUEST);
 
     private final String message;
     private final HttpStatus httpStatus;
