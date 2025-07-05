@@ -5,7 +5,7 @@ import com.dogworld.dogdog.cart.domain.CartItem;
 import com.dogworld.dogdog.cart.domain.CartStatus;
 import com.dogworld.dogdog.cart.domain.repository.CartRepository;
 import com.dogworld.dogdog.cart.interfaces.dto.request.CartItemAddRequest;
-import com.dogworld.dogdog.cart.interfaces.dto.request.CartRequest;
+import com.dogworld.dogdog.cart.interfaces.dto.request.CartAddRequest;
 import com.dogworld.dogdog.cart.interfaces.dto.response.CartItemAddResponse;
 import com.dogworld.dogdog.global.error.code.ErrorCode;
 import com.dogworld.dogdog.global.error.detail.StockExceptionDetail;
@@ -32,7 +32,7 @@ public class CartCommandService {
   private final MemberRepository  memberRepository;
   private final ProductRepository productRepository;
 
-  public List<CartItemAddResponse> addItems(CartRequest request) {
+  public List<CartItemAddResponse> addItems(CartAddRequest request) {
     Member member = getMember(request);
     Cart cart = getOrCreateCart(member);
 
@@ -105,7 +105,7 @@ public class CartCommandService {
         .orElseGet(() -> cartRepository.save(Cart.create(member)));
   }
 
-  private Member getMember(CartRequest request) {
+  private Member getMember(CartAddRequest request) {
     return memberRepository.findById(request.getMemberId())
         .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
   }
