@@ -41,10 +41,13 @@ public class Cart extends BaseEntity {
   @Column(nullable = false)
   private CartStatus status;
 
-  @Builder
-  public Cart(Member member, CartStatus status) {
+  private Cart(Member member) {
     this.member = member;
-    this.status = status;
+    this.status = CartStatus.ACTIVE;
     this.cartItems = new ArrayList<>();
+  }
+
+  public static Cart create(Member member) {
+    return new Cart(member);
   }
 }

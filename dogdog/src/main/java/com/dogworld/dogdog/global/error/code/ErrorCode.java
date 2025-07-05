@@ -17,6 +17,7 @@ public enum ErrorCode {
     NOT_FOUND_PRODUCT("존재하지 않는 상품입니다.", HttpStatus.NOT_FOUND),
     DUPLICATED_PRODUCT_NAME("상품 이름이 중복입니다.", HttpStatus.BAD_REQUEST),
     PRODUCT_CANNOT_BE_DELETED("완료된 주문에 포함된 상품은 삭제할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    NOT_ENOUGH_PRODUCT_STOCK("해당 상품의 재고({stock})가 요청 수량({quantity})보다 부족합니다.", HttpStatus.BAD_REQUEST),
 
     // == Category ==
     NOT_FOUND_CATEGORY("카테고리를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),

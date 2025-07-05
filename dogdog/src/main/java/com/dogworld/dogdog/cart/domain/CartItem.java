@@ -41,25 +41,27 @@ public class CartItem extends BaseEntity {
   @Column(nullable = false, precision = 18, scale = 2)
   private BigDecimal price;
 
-  @Column(nullable = false, precision = 18, scale = 2)
-  private BigDecimal totalPrice;
-
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private CartItemStatus status;
 
-  @Builder
-  public CartItem(Cart cart, Product product, int quantity) {
+  private CartItem(Cart cart, Product product, int quantity) {
     this.cart = cart;
     this.product = product;
     this.quantity = quantity;
-
     this.price = product.getPrice();
-    this.totalPrice = calculateTotalPrice();
     this.status = CartItemStatus.ACTIVE;
   }
 
-  private BigDecimal calculateTotalPrice() {
+  public static CartItem create(Cart cart, Product product, int quantity) {
+    return new CartItem(cart, product, quantity);
+  }
+
+  public void increaseQuantity(int quantity) {
+    this.quantity += quantity;
+  }
+
+  private BigDecimal getTotalPrice() {
     return price.multiply(BigDecimal.valueOf(quantity));
   }
 }

@@ -1,2 +1,8 @@
-package com.dogworld.dogdog.cart.interfaces.dto.response;public class CartResponse {
+package com.dogworld.dogdog.cart.interfaces.dto.response;
+
+import lombok.Getter;
+
+@Getter
+public class CartResponse {
+
 }
