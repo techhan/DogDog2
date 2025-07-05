@@ -40,31 +40,27 @@ public class Category extends BaseEntity {
   @Column(nullable = false)
   private Boolean active;
 
-  @Builder
-  public Category(String name, Category parent, int depth, int sortOrder, Boolean active) {
+  private Category(String name, Category parent, int sortOrder, Boolean active) {
     this.name = name;
     this.parent = parent;
-    this.depth = depth;
-    this.sortOrder = sortOrder;
+    this.depth = (parent != null) ? parent.getDepth() + 1 : 0;
+    this.sortOrder = (sortOrder != 0) ? sortOrder : 1;
     this.active = (active != null) ? active : false;
   }
 
   public static Category create(CategoryRequest request, Category parent) {
-    int depth = parent == null ? 0 : parent.getDepth() + 1;
-
-    return Category.builder()
-        .name(request.getName())
-        .parent(parent)
-        .depth(depth)
-        .sortOrder((request.getSortOrder() != null) ? request.getSortOrder() : 1)
-        .active(Boolean.TRUE.equals(request.getActive()))
-        .build();
+    return new Category(
+        request.getName(),
+        parent,
+        (request.getSortOrder() != null) ? request.getSortOrder() : 1,
+        request.getActive()
+    );
   }
 
   public void update(CategoryRequest request, Category parent) {
     this.name = request.getName();
     this.parent = parent;
-    this.depth = parent.getDepth() + 1;
+    this.depth = (parent != null) ? parent.getDepth() + 1 : 0;
     this.sortOrder = request.getSortOrder();
     this.active = request.getActive();
   }

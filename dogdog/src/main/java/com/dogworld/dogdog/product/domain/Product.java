@@ -54,9 +54,8 @@ public class Product extends BaseEntity {
   @Column(nullable = false)
   private boolean deleted;
 
-  @Builder
-  public Product(String name, String description, BigDecimal price, int stock, Category category,
-      ProductStatus status, String thumbnailUrl, boolean deleted) {
+  private Product(String name, String description, BigDecimal price, int stock, Category category,
+      ProductStatus status, String thumbnailUrl) {
     this.name = name;
     this.description = description;
     this.price = price;
@@ -64,19 +63,19 @@ public class Product extends BaseEntity {
     this.category = category;
     this.status = (status == null) ? ProductStatus.SELLING : status;
     this.thumbnailUrl = thumbnailUrl;
-    this.deleted = deleted;
+    this.deleted = false;
   }
 
   public static Product create(ProductRequest request, Category category) {
-    return Product.builder()
-        .name(request.getName())
-        .description(request.getDescription())
-        .price(BigDecimal.valueOf(request.getPrice()))
-        .stock(request.getStock())
-        .category(category)
-        .status(request.getStatus())
-        .thumbnailUrl(request.getThumbnailUrl())
-        .build();
+    return new Product(
+        request.getName(),
+        request.getDescription(),
+        BigDecimal.valueOf(request.getPrice()),
+        request.getStock(),
+        category,
+        request.getStatus(),
+        request.getThumbnailUrl()
+    );
   }
 
   public void update(ProductRequest request, Category category) {

@@ -65,8 +65,7 @@ public class Member extends BaseEntity {
 
   private LocalDateTime deletedAt;
 
-  @Builder
-  public Member(String username, String password, String name, String email, String phoneNumber,
+  private Member(String username, String password, String name, String email, String phoneNumber,
       MemberRole role, MemberStatus status, boolean agreedTerms, boolean agreedPrivacy,
       boolean agreedMarketing, LocalDateTime marketingAgreedAt) {
     this.username = username;
@@ -83,18 +82,19 @@ public class Member extends BaseEntity {
   }
 
   public static Member create(MemberRequest request, BCryptPasswordEncoder passwordEncoder) {
-    return Member.builder()
-        .username(request.getUsername())
-        .password(passwordEncoder.encode(request.getPassword()))
-        .name(request.getName())
-        .email(request.getEmail())
-        .phoneNumber(request.getPhoneNumber())
-        .role(request.getRole())
-        .agreedTerms(request.isAgreedTerms())
-        .agreedPrivacy(request.isAgreedPrivacy())
-        .agreedMarketing(request.isAgreedMarketing())
-        .marketingAgreedAt(request.isAgreedMarketing() ? LocalDateTime.now() : null)
-        .build();
+    return new Member(
+        request.getUsername(),
+        passwordEncoder.encode(request.getPassword()),
+        request.getName(),
+        request.getEmail(),
+        request.getPhoneNumber(),
+        request.getRole(),
+        null,
+        request.isAgreedTerms(),
+        request.isAgreedPrivacy(),
+        request.isAgreedMarketing(),
+        request.isAgreedMarketing() ? LocalDateTime.now() : null
+        );
   }
 
 }
