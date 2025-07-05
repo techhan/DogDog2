@@ -61,7 +61,7 @@ public class CartItem extends BaseEntity {
     this.quantity += quantity;
   }
 
-  private BigDecimal getTotalPrice() {
+  public BigDecimal getTotalPrice() {
     return price.multiply(BigDecimal.valueOf(quantity));
   }
 }

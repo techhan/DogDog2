@@ -24,21 +24,21 @@ public class CartQueryService {
   private final CartRepository cartRepository;
 
   public CartResponse getAllCartItems(CartRequest request) {
-    Member member = memberRepository.findById(request.getMemberId())
-        .orElseThrow(() -> new CustomException(
-            ErrorCode.NOT_FOUND_USER));
+    Member member = getMember(request);
+
     return cartRepository.findByMemberAndStatus(member, CartStatus.ACTIVE)
         .map(cart -> {
           List<CartItemResponse> cartItemResponses = cart.getCartItems().stream()
               .map(CartItemResponse::from)
               .toList();
 
-          BigDecimal totalPrice = cartItemResponses.stream()
-              .map(CartItemResponse::getTotalPrice)
-              .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-          return CartResponse.from(cart, cartItemResponses, totalPrice);
+          return CartResponse.from(cart, cartItemResponses, cart.getTotalPrice());
         })
         .orElseGet(CartResponse::empty);
+  }
+
+  private Member getMember(CartRequest request) {
+    return memberRepository.findById(request.getMemberId())
+        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
   }
 }

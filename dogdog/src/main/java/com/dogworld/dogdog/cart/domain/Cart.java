@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -49,5 +50,11 @@ public class Cart extends BaseEntity {
 
   public static Cart create(Member member) {
     return new Cart(member);
+  }
+
+  public BigDecimal getTotalPrice() {
+    return cartItems.stream()
+        .map(CartItem::getTotalPrice)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 }

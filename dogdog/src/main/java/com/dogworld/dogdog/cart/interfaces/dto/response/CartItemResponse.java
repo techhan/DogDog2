@@ -19,11 +19,6 @@ public class CartItemResponse {
   private int quantity;
   private BigDecimal price;
 
-  @JsonIgnore
-  public BigDecimal getTotalPrice() {
-    return price.multiply(new BigDecimal(quantity));
-  }
-
   public static CartItemResponse from(CartItem cartItem) {
     return CartItemResponse.builder()
         .cartItemId(cartItem.getId())
