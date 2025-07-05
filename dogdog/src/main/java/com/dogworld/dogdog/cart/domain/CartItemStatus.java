@@ -1,4 +1,4 @@
-package com.dogworld.dogdog.cartItem.domain;
+package com.dogworld.dogdog.cart.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

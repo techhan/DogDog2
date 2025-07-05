@@ -1,7 +1,6 @@
-package com.dogworld.dogdog.cartItem.domain;
+package com.dogworld.dogdog.purchase.domain;
 
 import com.dogworld.dogdog.common.domain.BaseEntity;
-import com.dogworld.dogdog.cart.domain.Cart;
 import com.dogworld.dogdog.product.domain.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,15 +21,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CartItem extends BaseEntity {
+public class PurchaseProduct extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "cart_id", nullable = false)
-  private Cart cart;
+  @JoinColumn(name = "purchase_id", nullable = false)
+  private Purchase purchase;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_id", nullable = false)
@@ -47,20 +46,16 @@ public class CartItem extends BaseEntity {
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private CartItemStatus status;
+  private PurchaseProductStatus status = PurchaseProductStatus.ORDERED;
 
   @Builder
-  public CartItem(Cart cart, Product product, int quantity) {
-    this.cart = cart;
+  public PurchaseProduct(Purchase purchase, Product product, int quantity, BigDecimal price,
+      BigDecimal totalPrice, PurchaseProductStatus status) {
+    this.purchase = purchase;
     this.product = product;
     this.quantity = quantity;
-
-    this.price = product.getPrice();
-    this.totalPrice = calculateTotalPrice();
-    this.status = CartItemStatus.ACTIVE;
-  }
-
-  private BigDecimal calculateTotalPrice() {
-    return price.multiply(BigDecimal.valueOf(quantity));
+    this.price = price;
+    this.totalPrice = totalPrice;
+    this.status = status;
   }
 }

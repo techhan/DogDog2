@@ -1,7 +1,6 @@
 package com.dogworld.dogdog.cart.domain;
 
 import com.dogworld.dogdog.common.domain.BaseEntity;
-import com.dogworld.dogdog.cartItem.domain.CartItem;
 import com.dogworld.dogdog.member.domain.Member;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

@@ -2,7 +2,6 @@ package com.dogworld.dogdog.purchase.domain;
 
 import com.dogworld.dogdog.common.domain.BaseEntity;
 import com.dogworld.dogdog.member.domain.Member;
-import com.dogworld.dogdog.purchaseproduct.domain.PurchaseProduct;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

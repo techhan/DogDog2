@@ -1,9 +1,7 @@
-package com.dogworld.dogdog.refundItem.domain;
+package com.dogworld.dogdog.refund.domain;
 
 import com.dogworld.dogdog.common.domain.BaseEntity;
-import com.dogworld.dogdog.purchaseproduct.domain.PurchaseProduct;
-import com.dogworld.dogdog.refund.domain.Refund;
-import com.dogworld.dogdog.refund.domain.RefundType;
+import com.dogworld.dogdog.purchase.domain.PurchaseProduct;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
