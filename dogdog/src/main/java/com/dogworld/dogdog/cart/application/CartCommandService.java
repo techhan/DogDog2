@@ -39,13 +39,18 @@ public class CartCommandService {
     Member member = getMember(request.getMemberId());
     Cart cart = getOrCreateCart(member);
 
-    List<CartItemAddRequest> cartItemsRequest = request.getCartItems();
-    List<Long> productIds = extractProductIds(cartItemsRequest);
-    Map<Long, Product> productMap = getProductMap(productIds);
+    Map<Long, Product> productMap = getProductMap(request.getCartItems());
 
-    List<CartItem> cartItems = applyCartItemsFromRequest(cart, cartItemsRequest, productMap);
+    for(CartItemAddRequest itemRequest : request.getCartItems()) {
+      Product product = productMap.get(itemRequest.getProductId());
+      int quantity = itemRequest.getQuantity();
+      int totalQty = cart.getQuantity(product) + quantity;
 
-    return cartItems.stream()
+      validateStock(product, totalQty);
+      cart.addOrUpdateItem(product, quantity);
+    }
+
+    return cart.getCartItems().stream()
         .map(CartItemAddResponse::from)
         .toList();
   }
@@ -55,11 +60,15 @@ public class CartCommandService {
     Cart cart = getCart(member);
     CartItem cartItem = getCartItem(cartItemId, cart.getId());
 
+    validateCartItemOwnership(cartItem, member);
+
+    cartItemRepository.delete(cartItem);
+  }
+
+  private void validateCartItemOwnership(CartItem cartItem, Member member) {
     if(isNotCartItemOwner(cartItem, member)) {
       throw new CustomException(ErrorCode.CART_ITEM_NOT_BELONG_TO_MEMBER);
     }
-
-    cartItemRepository.delete(cartItem);
   }
 
   public void deleteItems(Long cartId, CartRequest request) {
@@ -95,16 +104,6 @@ public class CartCommandService {
         .orElseGet(() -> cartRepository.save(Cart.create(member)));
   }
 
-  private List<CartItem> applyCartItemsFromRequest(Cart cart, List<CartItemAddRequest> cartItemsRequest,
-      Map<Long, Product> productMap) {
-    List<CartItem> cartItems = cart.getCartItems();
-    for(CartItemAddRequest cartItemAddRequest : cartItemsRequest) {
-      Product product = getProductFromMap(cartItemAddRequest, productMap);
-      addOrUpdateCartItem(cartItemAddRequest, cartItems, product, cart);
-    }
-    return cartItems;
-  }
-
   private void addOrUpdateCartItem(CartItemAddRequest cartItemAddRequest, List<CartItem> cartItems,
                                     Product product, Cart cart) {
     int quantity = cartItemAddRequest.getQuantity();
@@ -121,16 +120,13 @@ public class CartCommandService {
     }
   }
 
-  private Map<Long, Product> getProductMap(List<Long> productIds) {
-    return productRepository.findAllById(productIds)
-        .stream().collect(Collectors.toMap(Product::getId, Function.identity()));
-  }
-
-
-  private List<Long> extractProductIds(List<CartItemAddRequest> cartItemsRequest) {
-    return cartItemsRequest.stream()
+  private Map<Long, Product> getProductMap(List<CartItemAddRequest> cartItemsRequest) {
+    List<Long> productIds = cartItemsRequest.stream()
         .map(CartItemAddRequest::getProductId)
         .toList();
+
+    return productRepository.findAllById(productIds)
+        .stream().collect(Collectors.toMap(Product::getId, Function.identity()));
   }
 
   private void validateStock(Product product, int newQuantity) {
@@ -148,11 +144,6 @@ public class CartCommandService {
     return cartItems.stream()
         .filter(ci -> ci.getProduct().equals(product))
         .findFirst();
-  }
-
-  private Product getProductFromMap(CartItemAddRequest cartItemAddRequest,
-      Map<Long, Product> productMap) {
-    return productMap.get(cartItemAddRequest.getProductId());
   }
 
   private Cart getCart(Member member) {

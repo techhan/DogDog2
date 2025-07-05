@@ -2,6 +2,7 @@ package com.dogworld.dogdog.cart.domain;
 
 import com.dogworld.dogdog.common.domain.BaseEntity;
 import com.dogworld.dogdog.member.domain.Member;
+import com.dogworld.dogdog.product.domain.Product;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,6 +18,7 @@ import jakarta.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -60,5 +62,24 @@ public class Cart extends BaseEntity {
 
   public void clearItems() {
     this.cartItems.clear();
+  }
+  
+  public void addOrUpdateItem(Product product, int quantity) {
+    Optional<CartItem> existing = cartItems.stream()
+        .filter(ci -> ci.getProduct().equals(product))
+        .findFirst();
+    
+    if(existing.isPresent()) {
+      existing.get().increaseQuantity(quantity);
+    } else {
+      this.cartItems.add(CartItem.create(this, product, quantity));
+    }
+  }
+
+  public int getQuantity(Product product) {
+    return cartItems.stream()
+        .filter(ci -> ci.getProduct().equals(product))
+        .mapToInt(CartItem::getQuantity)
+        .findFirst().orElse(0);
   }
 }
