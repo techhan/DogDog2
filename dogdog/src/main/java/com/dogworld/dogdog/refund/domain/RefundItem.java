@@ -1,7 +1,7 @@
 package com.dogworld.dogdog.refund.domain;
 
 import com.dogworld.dogdog.common.domain.BaseEntity;
-import com.dogworld.dogdog.purchase.domain.PurchaseProduct;
+import com.dogworld.dogdog.purchase.domain.PurchaseItem;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -33,7 +33,7 @@ public class RefundItem extends BaseEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "purchase_product_id", nullable = false)
-  private PurchaseProduct purchaseProduct;
+  private PurchaseItem purchaseItem;
 
   @Column(nullable = false)
   private int refundQuantity;
@@ -47,10 +47,10 @@ public class RefundItem extends BaseEntity {
   private String reason;
 
   @Builder
-  public RefundItem(Refund refund, PurchaseProduct purchaseProduct, int refundQuantity,
+  public RefundItem(Refund refund, PurchaseItem purchaseItem, int refundQuantity,
       BigDecimal refundAmount, RefundType refundType, String reason) {
     this.refund = refund;
-    this.purchaseProduct = purchaseProduct;
+    this.purchaseItem = purchaseItem;
     this.refundQuantity = refundQuantity;
     this.refundAmount = refundAmount;
     this.refundType = refundType;

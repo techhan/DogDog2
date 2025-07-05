@@ -6,7 +6,7 @@ import com.dogworld.dogdog.product.domain.Product;
 import com.dogworld.dogdog.product.domain.QProduct;
 import com.dogworld.dogdog.purchase.domain.PurchaseStatus;
 import com.dogworld.dogdog.purchase.domain.QPurchase;
-import com.dogworld.dogdog.purchaseproduct.domain.QPurchaseProduct;
+import com.dogworld.dogdog.purchase.domain.QPurchaseItem;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
@@ -43,7 +43,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
   @Override
   public boolean isIncludeInCompletedOrder(Long productId) {
     QPurchase purchase = QPurchase.purchase;
-    QPurchaseProduct purchaseProduct = QPurchaseProduct.purchaseProduct;
+    QPurchaseItem purchaseProduct = QPurchaseItem.purchaseItem;
 
     return queryFactory
         .selectOne()

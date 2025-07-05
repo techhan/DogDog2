@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum PurchaseProductStatus {
+public enum PurchaseItemStatus {
   ORDERED("주문 완료"),
   CANCELED("주문 취소"),
   RETURNED("반품")

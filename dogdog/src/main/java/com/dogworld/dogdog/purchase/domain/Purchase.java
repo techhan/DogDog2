@@ -37,7 +37,7 @@ public class Purchase extends BaseEntity {
   private Member member;
 
   @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<PurchaseProduct> purchaseProducts = new ArrayList<>();
+  private List<PurchaseItem> purchaseItems = new ArrayList<>();
 
   @Column(nullable = false, precision = 18, scale = 2)
   private BigDecimal totalPrice;
@@ -52,10 +52,10 @@ public class Purchase extends BaseEntity {
   private LocalDateTime canceledAt;
 
   @Builder
-  public Purchase(Member member, List<PurchaseProduct> purchaseProducts, BigDecimal totalPrice,
+  public Purchase(Member member, List<PurchaseItem> purchaseItems, BigDecimal totalPrice,
       PurchaseStatus status, LocalDateTime orderedAt) {
     this.member = member;
-    this.purchaseProducts = purchaseProducts;
+    this.purchaseItems = purchaseItems;
     this.totalPrice = totalPrice;
     this.status = status == null ? PurchaseStatus.PENDING : status;
     this.orderedAt = orderedAt;

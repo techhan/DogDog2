@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PurchaseProduct extends BaseEntity {
+public class PurchaseItem extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,11 +46,11 @@ public class PurchaseProduct extends BaseEntity {
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private PurchaseProductStatus status = PurchaseProductStatus.ORDERED;
+  private PurchaseItemStatus status = PurchaseItemStatus.ORDERED;
 
   @Builder
-  public PurchaseProduct(Purchase purchase, Product product, int quantity, BigDecimal price,
-      BigDecimal totalPrice, PurchaseProductStatus status) {
+  public PurchaseItem(Purchase purchase, Product product, int quantity, BigDecimal price,
+      BigDecimal totalPrice, PurchaseItemStatus status) {
     this.purchase = purchase;
     this.product = product;
     this.quantity = quantity;
