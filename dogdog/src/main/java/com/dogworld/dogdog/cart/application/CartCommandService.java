@@ -9,7 +9,6 @@ import com.dogworld.dogdog.cart.interfaces.dto.request.CartItemAddRequest;
 import com.dogworld.dogdog.cart.interfaces.dto.request.CartAddRequest;
 import com.dogworld.dogdog.cart.interfaces.dto.request.CartRequest;
 import com.dogworld.dogdog.cart.interfaces.dto.response.CartItemAddResponse;
-import com.dogworld.dogdog.cart.interfaces.dto.response.CartResponse;
 import com.dogworld.dogdog.global.error.code.ErrorCode;
 import com.dogworld.dogdog.global.error.detail.StockExceptionDetail;
 import com.dogworld.dogdog.global.error.exception.CustomException;
@@ -61,6 +60,20 @@ public class CartCommandService {
     }
 
     cartItemRepository.delete(cartItem);
+  }
+
+  public void deleteItems(Long cartId, CartRequest request) {
+    Member member = getMember(request.getMemberId());
+    Cart cart = getCartAllItems(member);
+    if(isDifferentCartId(cartId, cart)) {
+      throw new CustomException(ErrorCode.CART_NOT_BELONG_TO_MEMBER);
+    }
+
+    cart.clearItems();
+  }
+
+  private  boolean isDifferentCartId(Long cartId, Cart cart) {
+    return !cartId.equals(cart.getId());
   }
 
   private boolean isNotCartItemOwner(CartItem cartItem, Member member) {
@@ -144,6 +157,11 @@ public class CartCommandService {
 
   private Cart getCart(Member member) {
     return cartRepository.findByMemberAndStatus(member, CartStatus.ACTIVE)
+        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CART));
+  }
+
+  private Cart getCartAllItems(Member member) {
+    return cartRepository.findByMemberAndStatusWithItems(member, CartStatus.ACTIVE)
         .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CART));
   }
 }

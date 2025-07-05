@@ -57,4 +57,8 @@ public class Cart extends BaseEntity {
         .map(CartItem::getTotalPrice)
         .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
+
+  public void clearItems() {
+    this.cartItems.clear();
+  }
 }
