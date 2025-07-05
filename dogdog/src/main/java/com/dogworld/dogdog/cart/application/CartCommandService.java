@@ -67,7 +67,7 @@ public class CartCommandService {
     }
   }
 
-  private static void validateStock(Product product, int newQuantity) {
+  private void validateStock(Product product, int newQuantity) {
     if(product.getStock() < newQuantity) {
       throw new CustomException(ErrorCode.NOT_ENOUGH_PRODUCT_STOCK
           , new StockExceptionDetail(product.getStock(), newQuantity));
