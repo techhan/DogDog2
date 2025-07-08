@@ -87,4 +87,10 @@ public class Product extends BaseEntity {
     this.status = request.getStatus();
     this.thumbnailUrl = request.getThumbnailUrl();
   }
+
+  public void decreaseStock(int quantity) {
+    if(quantity > 0) {
+      stock -= quantity;
+    }
+  }
 }

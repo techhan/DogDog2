@@ -47,6 +47,9 @@ public class Purchase extends BaseEntity {
   private PurchaseStatus status;
 
   @Column(nullable = false)
+  private String shippingAddress;
+
+  @Column(nullable = false)
   private LocalDateTime orderedAt;
 
   private LocalDateTime canceledAt;
@@ -59,5 +62,12 @@ public class Purchase extends BaseEntity {
     this.totalPrice = totalPrice;
     this.status = status == null ? PurchaseStatus.PENDING : status;
     this.orderedAt = orderedAt;
+  }
+
+  // TODO 구현해야됨
+  public static Purchase create(Member member) {
+    return Purchase.builder()
+        .member(member)
+        .build();
   }
 }
