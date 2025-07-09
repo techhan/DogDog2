@@ -1,5 +1,6 @@
 package com.dogworld.dogdog.purchase.domain;
 
+import com.dogworld.dogdog.cart.domain.CartItem;
 import com.dogworld.dogdog.common.domain.BaseEntity;
 import com.dogworld.dogdog.product.domain.Product;
 import jakarta.persistence.Column;
@@ -46,16 +47,30 @@ public class PurchaseItem extends BaseEntity {
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private PurchaseItemStatus status = PurchaseItemStatus.ORDERED;
+  private PurchaseItemStatus status;
+
+  public static PurchaseItem ofCartItem(Purchase purchase, CartItem cartItem) {
+    return PurchaseItem.builder()
+        .purchase(purchase)
+        .product(cartItem.getProduct())
+        .quantity(cartItem.getQuantity())
+        .price(cartItem.getPrice())
+        .status(PurchaseItemStatus.ORDERING)
+        .build();
+  }
 
   @Builder
-  public PurchaseItem(Purchase purchase, Product product, int quantity, BigDecimal price,
-      BigDecimal totalPrice, PurchaseItemStatus status) {
+  private PurchaseItem(Purchase purchase, Product product, int quantity, BigDecimal price,
+      PurchaseItemStatus status) {
     this.purchase = purchase;
     this.product = product;
     this.quantity = quantity;
     this.price = price;
-    this.totalPrice = totalPrice;
-    this.status = status;
+    this.totalPrice = calculateTotalPrice(price, quantity);
+    this.status = (status != null) ? status : PurchaseItemStatus.ORDERING;
+  }
+
+  private BigDecimal calculateTotalPrice(BigDecimal price, int quantity) {
+    return price.multiply(BigDecimal.valueOf(quantity));
   }
 }

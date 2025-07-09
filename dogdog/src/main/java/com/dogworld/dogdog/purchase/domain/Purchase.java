@@ -1,7 +1,9 @@
 package com.dogworld.dogdog.purchase.domain;
 
+import com.dogworld.dogdog.cart.domain.CartItem;
 import com.dogworld.dogdog.common.domain.BaseEntity;
 import com.dogworld.dogdog.member.domain.Member;
+import com.dogworld.dogdog.purchase.interfaces.dto.request.PurchaseFromCartRequest;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,19 +57,42 @@ public class Purchase extends BaseEntity {
   private LocalDateTime canceledAt;
 
   @Builder
-  public Purchase(Member member, List<PurchaseItem> purchaseItems, BigDecimal totalPrice,
-      PurchaseStatus status, LocalDateTime orderedAt) {
+  private Purchase(Member member, List<PurchaseItem> purchaseItems, BigDecimal totalPrice,
+      PurchaseStatus status, LocalDateTime orderedAt, String shippingAddress) {
     this.member = member;
     this.purchaseItems = purchaseItems;
     this.totalPrice = totalPrice;
-    this.status = status == null ? PurchaseStatus.PENDING : status;
+    this.status = status;
     this.orderedAt = orderedAt;
+    this.shippingAddress = shippingAddress;
   }
 
-  // TODO 구현해야됨
-  public static Purchase create(Member member) {
-    return Purchase.builder()
+  public static Purchase create(PurchaseFromCartRequest request, Member member
+                              , List<CartItem> cartItems, LocalDateTime orderedAt) {
+    Purchase createdPurchase = Purchase.builder()
         .member(member)
+        .purchaseItems(new ArrayList<>())
+        .status(PurchaseStatus.CREATED)
+        .shippingAddress(request.getShippingAddress())
+        .orderedAt(orderedAt)
         .build();
+
+    List<PurchaseItem> purchaseItems = cartItemToPurchaseItem(createdPurchase, cartItems);
+    createdPurchase.purchaseItems.addAll(purchaseItems);
+    createdPurchase.totalPrice = calculateTotalPrice(purchaseItems);
+
+    return createdPurchase;
+  }
+
+  private static List<PurchaseItem> cartItemToPurchaseItem(Purchase purchase, List<CartItem> cartItems) {
+    return cartItems.stream()
+        .map(cartItem -> PurchaseItem.ofCartItem(purchase, cartItem))
+        .toList();
+  }
+
+  private static BigDecimal calculateTotalPrice(List<PurchaseItem> purchaseItems) {
+    return purchaseItems.stream()
+        .map(PurchaseItem::getTotalPrice)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 }

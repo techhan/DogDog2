@@ -12,6 +12,7 @@ import com.dogworld.dogdog.purchase.domain.Purchase;
 import com.dogworld.dogdog.purchase.domain.repository.PurchaseRepository;
 import com.dogworld.dogdog.purchase.interfaces.dto.request.PurchaseFromCartRequest;
 import com.dogworld.dogdog.purchase.interfaces.dto.response.PurchaseFromCartResponse;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,9 +33,8 @@ public class PurchaseCommandService {
     validateStockItems(cartItems);
     productDecreaseStock(cartItems);
 
-    Purchase.create(member);
-
-    return null ;
+    Purchase createdPurchase = Purchase.create(request, member, cartItems, LocalDateTime.now());
+    return PurchaseFromCartResponse.from(createdPurchase);
   }
 
   private static void productDecreaseStock(List<CartItem> cartItems) {
