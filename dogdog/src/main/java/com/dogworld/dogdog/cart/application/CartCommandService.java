@@ -91,33 +91,17 @@ public class CartCommandService {
 
   private CartItem getCartItem(Long cartItemId, Long cartId) {
     return cartItemRepository.findByIdAndCartId(cartItemId, cartId)
-        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CART_ITEM));
+        .orElseThrow(() -> new CustomException(ErrorCode.INVALID_CART_ITEM_FOR_DELETE));
   }
 
   private Member getMember(Long memberId) {
     return memberRepository.findById(memberId)
-        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
   }
 
   private Cart getOrCreateCart(Member member) {
     return cartRepository.findByMemberAndStatus(member, CartStatus.ACTIVE)
         .orElseGet(() -> cartRepository.save(Cart.create(member)));
-  }
-
-  private void addOrUpdateCartItem(CartItemAddRequest cartItemAddRequest, List<CartItem> cartItems,
-                                    Product product, Cart cart) {
-    int quantity = cartItemAddRequest.getQuantity();
-
-    Optional<CartItem> existingItem = hadProduct(cartItems, product);
-
-    if(existingItem.isPresent()) {
-      int newQuantity = calculateNewQuantity(existingItem, quantity);
-      validateStock(product, newQuantity);
-
-      existingItem.get().increaseQuantity(quantity);
-    } else {
-      cartItems.add(CartItem.create(cart, product, quantity));
-    }
   }
 
   private Map<Long, Product> getProductMap(List<CartItemAddRequest> cartItemsRequest) {
@@ -136,23 +120,13 @@ public class CartCommandService {
     }
   }
 
-  private int calculateNewQuantity(Optional<CartItem> existingItem, int quantity) {
-    return existingItem.get().getQuantity() + quantity;
-  }
-
-  private Optional<CartItem> hadProduct(List<CartItem> cartItems, Product product) {
-    return cartItems.stream()
-        .filter(ci -> ci.getProduct().equals(product))
-        .findFirst();
-  }
-
   private Cart getCart(Member member) {
     return cartRepository.findByMemberAndStatus(member, CartStatus.ACTIVE)
-        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CART));
+        .orElseThrow(() -> new CustomException(ErrorCode.CART_NOT_FOUND));
   }
 
   private Cart getCartAllItems(Member member) {
     return cartRepository.findByMemberAndStatusWithItems(member, CartStatus.ACTIVE)
-        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CART));
+        .orElseThrow(() -> new CustomException(ErrorCode.CART_NOT_FOUND));
   }
 }

@@ -27,17 +27,31 @@ public class PurchaseCommandService {
 
   public PurchaseFromCartResponse purchaseFromCart(PurchaseFromCartRequest request) {
     Cart cart = getCart(request);
+
+    validateCartNotEmpty(cart);
     Member member = cart.getMember();
     List<CartItem> cartItems = cart.getCartItems();
 
     validateStockItems(cartItems);
-    productDecreaseStock(cartItems);
+    decreaseProductStocks(cartItems);
 
     Purchase createdPurchase = Purchase.create(request, member, cartItems, LocalDateTime.now());
+    purchaseRepository.saveAndFlush(createdPurchase);
+
+    // TODO : 결제 연동 로직
+    // 주문 완료 후처리
+    createdPurchase.markAsOrdered();
+    cartItems.clear();
     return PurchaseFromCartResponse.from(createdPurchase);
   }
 
-  private static void productDecreaseStock(List<CartItem> cartItems) {
+  private static void validateCartNotEmpty(Cart cart) {
+    if(cart.getCartItems().isEmpty()) {
+      throw new CustomException(ErrorCode.EMPTY_CART);
+    }
+  }
+
+  private static void decreaseProductStocks(List<CartItem> cartItems) {
     cartItems
         .forEach(item -> item.getProduct().decreaseStock(item.getQuantity()));
   }
@@ -49,7 +63,7 @@ public class PurchaseCommandService {
 
   private Cart getCart(PurchaseFromCartRequest request) {
     return cartRepository.findById(request.getCartId())
-        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CART));
+        .orElseThrow(() -> new CustomException(ErrorCode.CART_NOT_FOUND));
   }
 
   private void validateStock(Product product, int quantity) {

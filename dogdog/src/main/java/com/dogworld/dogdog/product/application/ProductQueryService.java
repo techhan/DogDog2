@@ -40,7 +40,7 @@ public class ProductQueryService {
 
   private Product getProduct(Long productId) {
     return productRepository.findById(productId)
-        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PRODUCT));
+        .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
   }
 
   private void validateDuplicateName(String name) {

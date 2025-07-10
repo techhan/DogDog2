@@ -51,7 +51,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
         .join(purchaseProduct.purchase, purchase)
         .where(
             purchaseProduct.product.id.eq(productId),
-            purchase.status.eq(PurchaseStatus.COMPLETED)
+            purchase.status.eq(PurchaseStatus.ORDERED)
         )
         .fetchFirst() != null;
   }

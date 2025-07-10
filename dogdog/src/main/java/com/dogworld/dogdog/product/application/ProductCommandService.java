@@ -48,7 +48,7 @@ public class ProductCommandService {
 
   private Product getProduct(Long productId) {
     return productRepository.findById(productId)
-        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PRODUCT));
+        .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
   }
 
   private void validateDuplicateName(String name) {
@@ -59,7 +59,7 @@ public class ProductCommandService {
 
   private Category getCategory(Long categoryId) {
     return categoryRepository.findById(categoryId)
-        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATEGORY));
+        .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
   }
 
 }

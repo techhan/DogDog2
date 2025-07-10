@@ -59,6 +59,10 @@ public class PurchaseItem extends BaseEntity {
         .build();
   }
 
+  public void markAsOrdered() {
+    this.status = PurchaseItemStatus.ORDERED;
+  }
+
   @Builder
   private PurchaseItem(Purchase purchase, Product product, int quantity, BigDecimal price,
       PurchaseItemStatus status) {

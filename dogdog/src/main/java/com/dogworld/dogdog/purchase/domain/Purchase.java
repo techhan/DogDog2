@@ -95,4 +95,10 @@ public class Purchase extends BaseEntity {
         .map(PurchaseItem::getTotalPrice)
         .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
+
+  public void markAsOrdered() {
+    this.status = PurchaseStatus.ORDERED;
+    this.orderedAt = LocalDateTime.now();
+    this.purchaseItems.forEach(PurchaseItem::markAsOrdered);
+  }
 }

@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 public enum PurchaseStatus {
   CREATED("주문 생성"),
   PENDING("결제 대기"),
-  COMPLETED("결제 완료"),
+  PAID("결제 완료"),
+  ORDERED("주문 완료"),
   CANCELED("주문 취소")
   ;
 

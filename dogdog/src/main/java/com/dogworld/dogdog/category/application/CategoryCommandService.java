@@ -46,14 +46,14 @@ public class CategoryCommandService {
 
   private Category getCategory(Long categoryId) {
     return categoryRepository.findById(categoryId)
-        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CATEGORY));
+        .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
   }
 
   private Category getParentCategory(Long categoryParentId) {
     if(categoryParentId == null) return null;
 
     return categoryRepository.findById(categoryParentId)
-        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_PARENT_CATEGORY));
+        .orElseThrow(() -> new CustomException(ErrorCode.PARENT_CATEGORY_NOT_FOUND));
   }
 
   private void validateNotSelfAsParent(Long categoryId, Long parentId) {
