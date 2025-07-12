@@ -1,5 +1,6 @@
 package com.dogworld.dogdog.cart.interfaces;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -64,6 +65,8 @@ class CartControllerTest {
   private Product product1;
   private Product product2;
   private Product product3;
+  @Autowired
+  private CartItemRepository cartItemRepository;
 
   @BeforeEach
   void setUp() {
@@ -196,5 +199,43 @@ class CartControllerTest {
           .andExpect(status().isOk())
           .andExpect(jsonPath("$.result").value(true))
           .andExpect(jsonPath("$.message.items.length()").value(cart.getCartItems().size()));
+  }
+
+  @DisplayName("장바구니에 담긴 상품을 삭제한다.")
+  @Test
+  void should_delete_cart_item_when_request_is_valid() throws Exception {
+    // given
+    Cart cart = Cart.create(member);
+    cartRepository.saveAndFlush(cart);
+
+    cart.addOrUpdateItem(product1, 1);
+    cart.addOrUpdateItem(product2, 3);
+    cart.addOrUpdateItem(product3, 4);
+    cartRepository.flush();
+    cartItemRepository.flush();
+
+    Long itemId = cart.getCartItems().get(0).getId();
+    CartRequest request = CartRequest.builder().memberId(member.getId()).build();
+
+    String jsonString = objectMapper.writeValueAsString(request);
+
+    // when & then
+    mockMvc.perform(delete("/api/carts/items/" + itemId)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(jsonString)
+        .accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.result").value(true));
+
+//    cartItemRepository.flush();
+//    cartRepository.flush();
+//
+//    mockMvc.perform(get("/api/carts/" + member.getId())
+//            .contentType(MediaType.APPLICATION_JSON)
+//            .accept(MediaType.APPLICATION_JSON))
+//        .andExpect(status().isOk())
+//        .andExpect(jsonPath("$.result").value(true))
+//        .andExpect(jsonPath("$.message.items.length()").value(2));
+//
   }
 }

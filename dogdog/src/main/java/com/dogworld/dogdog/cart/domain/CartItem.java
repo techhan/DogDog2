@@ -17,6 +17,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -27,6 +28,7 @@ public class CartItem extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Setter
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "cart_id", nullable = false)
   private Cart cart;
@@ -64,4 +66,5 @@ public class CartItem extends BaseEntity {
   public BigDecimal getTotalPrice() {
     return price.multiply(BigDecimal.valueOf(quantity));
   }
+
 }

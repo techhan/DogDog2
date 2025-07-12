@@ -88,4 +88,9 @@ public class Cart extends BaseEntity {
         .mapToInt(CartItem::getQuantity)
         .findFirst().orElse(0);
   }
+
+  public void removeItem(CartItem cartItem) {
+    this.cartItems.remove(cartItem);
+    cartItem.setCart(null);
+  }
 }

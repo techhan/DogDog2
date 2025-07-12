@@ -63,6 +63,7 @@ public class CartCommandService {
     validateCartItemOwnership(cartItem, member);
 
     cartItemRepository.delete(cartItem);
+    cart.removeItem(cartItem);
   }
 
   private void validateCartItemOwnership(CartItem cartItem, Member member) {
