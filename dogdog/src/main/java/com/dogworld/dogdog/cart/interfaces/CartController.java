@@ -28,9 +28,9 @@ public class CartController {
   private final CartCommandService cartCommandService;
   private final CartQueryService cartQueryService;
 
-  @GetMapping
-  public ResponseEntity<ApiResponse<CartResponse>> getAllCartItems(@Valid @RequestBody CartRequest request) {
-    CartResponse response = cartQueryService.getAllCartItems(request);
+  @GetMapping("/{memberId}")
+  public ResponseEntity<ApiResponse<CartResponse>> getAllCartItems(@PathVariable Long memberId) {
+    CartResponse response = cartQueryService.getAllCartItems(memberId);
     return ResponseEntity.ok(ApiResponse.success(response));
   }
 

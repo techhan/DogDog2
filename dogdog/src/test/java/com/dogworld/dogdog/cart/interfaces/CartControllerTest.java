@@ -1,22 +1,32 @@
 package com.dogworld.dogdog.cart.interfaces;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.dogworld.dogdog.cart.application.CartCommandService;
 import com.dogworld.dogdog.cart.domain.Cart;
+import com.dogworld.dogdog.cart.domain.CartItem;
+import com.dogworld.dogdog.cart.domain.CartStatus;
 import com.dogworld.dogdog.cart.domain.repository.CartItemRepository;
 import com.dogworld.dogdog.cart.domain.repository.CartRepository;
 import com.dogworld.dogdog.cart.interfaces.dto.request.CartAddRequest;
 import com.dogworld.dogdog.cart.interfaces.dto.request.CartItemAddRequest;
+import com.dogworld.dogdog.cart.interfaces.dto.request.CartRequest;
+import com.dogworld.dogdog.cart.interfaces.dto.response.CartItemResponse;
+import com.dogworld.dogdog.cart.interfaces.dto.response.CartResponse;
+import com.dogworld.dogdog.category.domain.Category;
+import com.dogworld.dogdog.category.domain.TestCategoryFactory;
+import com.dogworld.dogdog.category.domain.repository.CategoryRepository;
 import com.dogworld.dogdog.member.domain.Member;
+import com.dogworld.dogdog.member.domain.TestMemberFactory;
 import com.dogworld.dogdog.member.domain.repository.MemberRepository;
 import com.dogworld.dogdog.product.domain.Product;
+import com.dogworld.dogdog.product.domain.TestProductFactory;
 import com.dogworld.dogdog.product.domain.repository.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
+import java.util.logging.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,9 +35,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class CartControllerTest {
 
   @Autowired
@@ -46,32 +58,48 @@ class CartControllerTest {
   private CartRepository cartRepository;
 
   @Autowired
-  private CartItemRepository cartItemRepository;
+  private CategoryRepository categoryRepository;
 
   private Member member;
-  private Cart cart;
+  private Product product1;
+  private Product product2;
+  private Product product3;
 
   @BeforeEach
   void setUp() {
-   // member = memberRepository.save(Member.create())
+    // 회원
+    member = TestMemberFactory.createMember();
+    memberRepository.saveAndFlush(member);
+
+    // 카테고리
+    Category category = TestCategoryFactory.createCategory(null);
+    categoryRepository.saveAndFlush(category);
+
+    // 상품
+    product1 = TestProductFactory.createProduct(category);
+    product2 = TestProductFactory.createProduct(category);
+    product3 = TestProductFactory.createProduct(category);
+
+    List<Product> items = List.of(product1, product2, product3);
+    productRepository.saveAllAndFlush(items);
   }
 
   @DisplayName("장바구니에 상품을 추가한다.")
   @Test
   void should_add_cart_item_when_request_is_valid() throws Exception {
-      // given
+    // given
     CartItemAddRequest item1 = CartItemAddRequest.builder()
-        .productId(4L)
+        .productId(product1.getId())
         .quantity(2)
-      .build();
+        .build();
     CartItemAddRequest item2 = CartItemAddRequest.builder()
-      .productId(5L)
-      .quantity(2)
-      .build();
+        .productId(product2.getId())
+        .quantity(2)
+        .build();
     List<CartItemAddRequest> items = List.of(item1, item2);
 
     CartAddRequest request = CartAddRequest.builder()
-        .memberId(3L)
+        .memberId(member.getId())
         .cartItems(items)
         .build();
 
@@ -84,26 +112,26 @@ class CartControllerTest {
           .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.result").value(true))
-        .andExpect(jsonPath("$.message.[0].productId").value(4L))
-        .andExpect(jsonPath("$.message.[1].productId").value(5L));
+        .andExpect(jsonPath("$.message.[0].productId").value(product1.getId()))
+        .andExpect(jsonPath("$.message.[1].productId").value(product2.getId()));
   }
 
   @DisplayName("존재하지 않는 회원 장바구니에 상품을 추가하면 예외가 발생한다.")
   @Test
   void should_throw_exception_when_user_not_found() throws Exception {
-      // given
+    // given
     CartItemAddRequest item1 = CartItemAddRequest.builder()
-        .productId(4L)
+        .productId(product1.getId())
         .quantity(2)
-      .build();
+        .build();
     CartItemAddRequest item2 = CartItemAddRequest.builder()
-      .productId(5L)
-      .quantity(2)
-      .build();
+        .productId(product2.getId())
+        .quantity(2)
+        .build();
     List<CartItemAddRequest> items = List.of(item1, item2);
 
     CartAddRequest request = CartAddRequest.builder()
-        .memberId(2L)
+        .memberId(member.getId() + 3)
         .cartItems(items)
         .build();
 
@@ -124,17 +152,17 @@ class CartControllerTest {
   void should_throw_exception_when_item_quantity_is_not_positive() throws Exception {
     // given
     CartItemAddRequest item1 = CartItemAddRequest.builder()
-        .productId(4L)
+        .productId(product1.getId())
         .quantity(1)
         .build();
     CartItemAddRequest item2 = CartItemAddRequest.builder()
-        .productId(5L)
+        .productId(product2.getId())
         .quantity(0)
         .build();
     List<CartItemAddRequest> items = List.of(item1, item2);
 
     CartAddRequest request = CartAddRequest.builder()
-        .memberId(3L)
+        .memberId(member.getId())
         .cartItems(items)
         .build();
 
@@ -153,13 +181,20 @@ class CartControllerTest {
   @DisplayName("장바구니에 담긴 전체 상품을 조회한다.")
   @Test
   void should_return_all_items_when_request_is_valid() throws Exception {
-      // given
+    // given
+    Cart cart = Cart.create(member);
+    cartRepository.saveAndFlush(cart);
 
+    cart.addOrUpdateItem(product1, 1);
+    cart.addOrUpdateItem(product2, 3);
+    cart.addOrUpdateItem(product3, 4);
 
-      // when
-
-      // then
+    // when & then
+      mockMvc.perform(get("/api/carts/" + member.getId())
+          .contentType(MediaType.APPLICATION_JSON)
+          .accept(MediaType.APPLICATION_JSON))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.result").value(true))
+          .andExpect(jsonPath("$.message.items.length()").value(cart.getCartItems().size()));
   }
-
-
 }

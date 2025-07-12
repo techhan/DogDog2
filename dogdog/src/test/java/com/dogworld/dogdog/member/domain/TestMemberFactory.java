@@ -1,26 +1,23 @@
 package com.dogworld.dogdog.member.domain;
 
 import com.dogworld.dogdog.member.interfaces.dto.request.MemberRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import java.util.UUID;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 public class TestMemberFactory {
 
-
-  private PasswordEncoder encoder;
-
   public static Member createMember() {
+    String unique = UUID.randomUUID().toString().substring(0, 8);
     MemberRequest request = MemberRequest.builder()
-        .username("id1")
-        .password("password1")
-        .email("email1")
-        .name("name1")
-        .password("010-0000-0000")
+        .username("id" + unique)
+        .password("password")
+        .email("email" + unique)
+        .name("name")
+        .phoneNumber("010-" + unique)
         .build();
 
-    //Member member Member.create(request, )
-    return null;
+    return Member.create(request, new BCryptPasswordEncoder());
   }
 
 }

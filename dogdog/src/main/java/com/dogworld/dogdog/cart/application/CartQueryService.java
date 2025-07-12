@@ -1,5 +1,6 @@
 package com.dogworld.dogdog.cart.application;
 
+import com.dogworld.dogdog.cart.domain.Cart;
 import com.dogworld.dogdog.cart.domain.CartStatus;
 import com.dogworld.dogdog.cart.domain.repository.CartRepository;
 import com.dogworld.dogdog.cart.interfaces.dto.request.CartRequest;
@@ -20,22 +21,24 @@ public class CartQueryService {
   private final MemberRepository memberRepository;
   private final CartRepository cartRepository;
 
-  public CartResponse getAllCartItems(CartRequest request) {
-    Member member = getMember(request);
+  public CartResponse getAllCartItems(Long memberId) {
+    Member member = getMember(memberId);
+    Cart cart = getOrCreateCart(member);
 
-    return cartRepository.findByMemberAndStatus(member, CartStatus.ACTIVE)
-        .map(cart -> {
-          List<CartItemResponse> cartItemResponses = cart.getCartItems().stream()
-              .map(CartItemResponse::from)
-              .toList();
+    List<CartItemResponse> cartItemResponse = cart.getCartItems().stream()
+        .map(CartItemResponse::from)
+        .toList();
 
-          return CartResponse.from(cart, cartItemResponses, cart.getTotalPrice());
-        })
-        .orElseGet(CartResponse::empty);
+    return CartResponse.from(cart, cartItemResponse, cart.getTotalPrice());
   }
 
-  private Member getMember(CartRequest request) {
-    return memberRepository.findById(request.getMemberId())
+  private Cart getOrCreateCart(Member member) {
+    return cartRepository.findByMemberAndStatus(member, CartStatus.ACTIVE)
+        .orElseGet(() -> cartRepository.save(Cart.create(member)));
+  }
+
+  private Member getMember(Long memberId) {
+    return memberRepository.findById(memberId)
         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
   }
 }

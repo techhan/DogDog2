@@ -1,5 +1,6 @@
 package com.dogworld.dogdog.cart.domain;
 
+import com.dogworld.dogdog.cart.interfaces.dto.response.CartResponse;
 import com.dogworld.dogdog.common.domain.BaseEntity;
 import com.dogworld.dogdog.member.domain.Member;
 import com.dogworld.dogdog.product.domain.Product;
@@ -17,6 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.AccessLevel;
@@ -44,14 +46,18 @@ public class Cart extends BaseEntity {
   @Column(nullable = false)
   private CartStatus status;
 
-  private Cart(Member member) {
+  private Cart(Member member, List<CartItem> cartItems) {
     this.member = member;
     this.status = CartStatus.ACTIVE;
-    this.cartItems = new ArrayList<>();
+    this.cartItems = cartItems.isEmpty() ? new ArrayList<>() : cartItems;
   }
 
   public static Cart create(Member member) {
-    return new Cart(member);
+    return new Cart(member, new ArrayList<>());
+  }
+
+  public static Cart create(Member member, List<CartItem> cartItems) {
+    return new Cart(member, cartItems);
   }
 
   public BigDecimal getTotalPrice() {
