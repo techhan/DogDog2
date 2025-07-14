@@ -49,7 +49,7 @@ public class Cart extends BaseEntity {
   private Cart(Member member, List<CartItem> cartItems) {
     this.member = member;
     this.status = CartStatus.ACTIVE;
-    this.cartItems = cartItems.isEmpty() ? new ArrayList<>() : cartItems;
+    this.cartItems = cartItems;
   }
 
   public static Cart create(Member member) {
