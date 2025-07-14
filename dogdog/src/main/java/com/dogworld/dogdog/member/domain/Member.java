@@ -97,4 +97,22 @@ public class Member extends BaseEntity {
         );
   }
 
+  @Override
+  public String toString() {
+    return "Member{" +
+            "id=" + id +
+            ", username='" + username + '\'' +
+            ", password='" + password + '\'' +
+            ", name='" + name + '\'' +
+            ", email='" + email + '\'' +
+            ", phoneNumber='" + phoneNumber + '\'' +
+            ", role=" + role +
+            ", status=" + status +
+            ", agreedTerms=" + agreedTerms +
+            ", agreedPrivacy=" + agreedPrivacy +
+            ", agreedMarketing=" + agreedMarketing +
+            ", marketingAgreedAt=" + marketingAgreedAt +
+            ", deletedAt=" + deletedAt +
+            '}';
+  }
 }
