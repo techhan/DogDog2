@@ -8,6 +8,7 @@ import com.dogworld.dogdog.global.error.detail.StockExceptionDetail;
 import com.dogworld.dogdog.global.error.exception.CustomException;
 import com.dogworld.dogdog.member.domain.Member;
 import com.dogworld.dogdog.product.domain.Product;
+import com.dogworld.dogdog.product.domain.repository.ProductRepository;
 import com.dogworld.dogdog.purchase.domain.Purchase;
 import com.dogworld.dogdog.purchase.domain.repository.PurchaseRepository;
 import com.dogworld.dogdog.purchase.interfaces.dto.request.PurchaseFromCartRequest;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PurchaseCommandService {
   private final PurchaseRepository purchaseRepository;
   private final CartRepository cartRepository;
+  private final ProductRepository productRepository;
 
   public PurchaseFromCartResponse purchaseFromCart(PurchaseFromCartRequest request) {
     Cart cart = getCart(request);
@@ -32,6 +34,7 @@ public class PurchaseCommandService {
     Member member = cart.getMember();
     List<CartItem> cartItems = cart.getCartItems();
 
+    validateProductsExist(cartItems);
     validateStockItems(cartItems);
     decreaseProductStocks(cartItems);
 
@@ -51,14 +54,18 @@ public class PurchaseCommandService {
     }
   }
 
-  private static void decreaseProductStocks(List<CartItem> cartItems) {
-    cartItems
-        .forEach(item -> item.getProduct().decreaseStock(item.getQuantity()));
+  private void validateProductsExist(List<CartItem> cartItems) {
+    cartItems.forEach(item -> validateProductExists(item.getProduct().getId()));
   }
 
   private void validateStockItems(List<CartItem> cartItems) {
     cartItems
         .forEach(item -> validateStock(item.getProduct(), item.getQuantity()));
+  }
+
+  private static void decreaseProductStocks(List<CartItem> cartItems) {
+    cartItems
+        .forEach(item -> item.getProduct().decreaseStock(item.getQuantity()));
   }
 
   private Cart getCart(PurchaseFromCartRequest request) {
@@ -70,6 +77,12 @@ public class PurchaseCommandService {
     if(product.getStock() < quantity) {
       throw new CustomException(ErrorCode.NOT_ENOUGH_PRODUCT_STOCK
           , new StockExceptionDetail(product.getStock(), quantity));
+    }
+  }
+
+  private void validateProductExists(long productId) {
+    if(!productRepository.existsById(productId)) {
+      throw new CustomException(ErrorCode.PRODUCT_NOT_FOUND);
     }
   }
 }

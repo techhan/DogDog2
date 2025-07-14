@@ -45,4 +45,15 @@ public class PurchaseFromCartResponse {
     this.shippingAddress = shippingAddress;
     this.orderedAt = orderedAt;
   }
+
+  @Override
+  public String toString() {
+    return "PurchaseFromCartResponse{" +
+        "purchaseId=" + purchaseId +
+        ", items=" + items +
+        ", totalPrice=" + totalPrice +
+        ", shippingAddress='" + shippingAddress + '\'' +
+        ", orderedAt=" + orderedAt +
+        '}';
+  }
 }
