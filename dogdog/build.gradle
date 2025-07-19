@@ -45,6 +45,8 @@ dependencies {
 
 	runtimeOnly 'com.h2database:h2'
 
+	implementation 'redis.clients:jedis:4.3.1' // jedis
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
