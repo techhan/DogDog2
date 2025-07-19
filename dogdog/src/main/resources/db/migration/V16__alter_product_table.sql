@@ -1,0 +1,6 @@
+
+ALTER TABLE product
+ADD COLUMN rating_average DECIMAL(2, 1) NOT NULL DEFAULT 0.0;
+
+ALTER TABLE product
+ADD COLUMN rating_count INT NOT NULL DEFAULT 0;
