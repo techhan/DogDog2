@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="dbee963d-1589-4f49-9e0c-9ea336cf1cd4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/dogdog/src/main/resources/db/migration/V19__rename_tables_plural.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/cart/domain/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/cart/domain/Cart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/cart/domain/CartItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/cart/domain/CartItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/category/domain/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/category/domain/Category.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/config/RedisConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/config/RedisConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/member/domain/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/member/domain/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/product/domain/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/product/domain/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/purchase/domain/Purchase.java" beforeDir="false" afterPath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/purchase/domain/Purchase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/purchase/domain/PurchaseItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/purchase/domain/PurchaseItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/rating/domain/Rating.java" beforeDir="false" afterPath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/rating/domain/Rating.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/refund/domain/Refund.java" beforeDir="false" afterPath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/refund/domain/Refund.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/refund/domain/RefundItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/dogdog/src/main/java/com/dogworld/dogdog/refund/domain/RefundItem.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/dogdog">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/dogdog">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="dogdog" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="dogdog" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="dogdog" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2zxUSLsSuhI1fKfdeaQZTYqrGic" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build dogdog.executor": "Run",
+    "Gradle.dogdog [build].executor": "Run",
+    "Gradle.dogdog [clean].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.DogdogApplication.executor": "Run",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/bogyeol/Desktop/han/DogDog2",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "File.Encoding",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
+  }
+}]]></component>
+  <component name="RunManager" selected="Spring Boot.DogdogApplication">
+    <configuration name="dogdog [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/dogdog" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="dogdog [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/dogdog" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="clean" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="DogdogApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="dogdog.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.dogworld.dogdog.DogdogApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.dogdog [build]" />
+        <item itemvalue="Gradle.dogdog [clean]" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.20224.300" />
+        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-IU-242.20224.300" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="dbee963d-1589-4f49-9e0c-9ea336cf1cd4" name="Changes" comment="" />
+      <created>1752672217020</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1752672217020</updated>
+      <workItem from="1752672218053" duration="854000" />
+      <workItem from="1752882837117" duration="597000" />
+      <workItem from="1752885562410" duration="2448000" />
+      <workItem from="1752890424179" duration="271000" />
+      <workItem from="1752890698860" duration="26762000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

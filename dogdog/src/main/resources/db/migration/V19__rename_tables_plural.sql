@@ -1,0 +1,10 @@
+RENAME TABLE cart TO carts;
+RENAME TABLE cart_item TO cart_items;
+RENAME TABLE category TO categories;
+RENAME TABLE member TO members;
+RENAME TABLE product TO products;
+RENAME TABLE purchase TO purchases;
+RENAME TABLE purchase_item TO purchase_items;
+RENAME TABLE rating TO ratings;
+RENAME TABLE refund TO refunds;
+RENAME TABLE refund_item TO refund_items;
