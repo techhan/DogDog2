@@ -19,6 +19,8 @@ public class ProductResponse {
   private CategoryProductResponse category;
   private ProductStatus status;
   private String thumbnailUrl;
+  private BigDecimal ratingScore;
+  private int ratingCount;
 
   public static ProductResponse from(Product product) {
     return ProductResponse.builder()
@@ -30,6 +32,8 @@ public class ProductResponse {
         .category(CategoryProductResponse.from(product.getCategory()))
         .status(product.getStatus())
         .thumbnailUrl(product.getThumbnailUrl())
+        .ratingScore(product.getRatingAverage())
+        .ratingCount(product.getRatingCount())
         .build();
   }
 }

@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.math.BigDecimal;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -100,5 +101,13 @@ public class Product extends BaseEntity {
     if(quantity > 0) {
       stock -= quantity;
     }
+  }
+
+  public void updateRatingCount(int count) {
+    ratingCount = count;
+  }
+
+  public void updateRatingAverage(BigDecimal score) {
+    this.ratingAverage = score;
   }
 }

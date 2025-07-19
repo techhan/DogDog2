@@ -5,6 +5,10 @@ spring:
   application:
     name: dogdog
 
+  # message
+  messages:
+    encoding: UTF-8
+
   # DB
   datasource:
     url: jdbc:mysql://localhost:3307/dog_db?useSSL=false&allowPublicKeyRetrieval=true

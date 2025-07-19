@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CartItemAddRequest {
-  @NotNull(message = "validation.productId.required")
+  @NotNull(message = "{validation.productId.required}")
   private Long productId;
 
   @NotNull(message = "{validation.cart.quantity.required}")

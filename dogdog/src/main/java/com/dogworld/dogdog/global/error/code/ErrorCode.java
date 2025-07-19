@@ -33,8 +33,12 @@ public enum ErrorCode {
     CART_NOT_BELONG_TO_MEMBER("회원의 장바구니가 아닙니다.", HttpStatus.BAD_REQUEST),
     EMPTY_CART("장바구니에 담긴 상품이 없습니다.", HttpStatus.BAD_REQUEST),
 
+    // == Rating ==
+    RATING_PERMISSION_DENIED("상품을 구매한 회원만 평점을 남길 수 있습니다.", HttpStatus.FORBIDDEN),
+
     // == validation error 공통화 ==
     INVALID_INPUT_VALUE("잘못된 입력입니다.", HttpStatus.BAD_REQUEST)
+
     ;
 
     private final String message;
