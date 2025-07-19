@@ -3,7 +3,8 @@ package com.dogworld.dogdog.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 @Configuration
 public class RedisConfig {
@@ -18,14 +19,16 @@ public class RedisConfig {
     private String redisPassword;
 
     @Bean
-    public Jedis jedis() {
-        Jedis jedis = new Jedis(redisHost, redisPort);
+    public JedisPool jedisPool() {
+        JedisPoolConfig poolConfig = new JedisPoolConfig();
+        poolConfig.setMaxIdle(10);
+        poolConfig.setMaxTotal(10);
+        poolConfig.setMinIdle(2);
 
         if(redisPassword != null && !redisPassword.isEmpty()) {
-            jedis.auth(redisPassword); // 비밀번호가 있으면 인증
+            return new JedisPool(poolConfig, redisHost, redisPort, 2000, redisPassword);
         }
 
-        return jedis;
+        return new JedisPool(poolConfig, redisHost, redisPort, 2000);
     }
-
 }

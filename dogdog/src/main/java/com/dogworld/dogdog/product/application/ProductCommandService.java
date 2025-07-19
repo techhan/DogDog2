@@ -7,6 +7,7 @@ import com.dogworld.dogdog.global.error.exception.CustomException;
 import com.dogworld.dogdog.product.domain.Product;
 import com.dogworld.dogdog.product.domain.repository.ProductRepository;
 import com.dogworld.dogdog.product.infrastructure.ProductQueryRepository;
+import com.dogworld.dogdog.product.infrastructure.ProductRedisRepository;
 import com.dogworld.dogdog.product.interfaces.dto.request.ProductRequest;
 import com.dogworld.dogdog.product.interfaces.dto.response.ProductResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class ProductCommandService {
   private final ProductRepository productRepository;
   private final ProductQueryRepository productQueryRepository;
   private final CategoryRepository categoryRepository;
+  private final ProductRedisRepository productRedisRepository;
 
   public ProductResponse createProduct(ProductRequest request) {
     validateDuplicateName(request.getName());
@@ -27,6 +29,7 @@ public class ProductCommandService {
     Category category = getCategory(request.getCategoryId());
     Product createdProduct = Product.create(request, category);
     Product savedProduct = productRepository.save(createdProduct);
+    productRedisRepository.createdProductAddSortedSet(savedProduct);
     return ProductResponse.from(savedProduct);
   }
 
@@ -34,6 +37,8 @@ public class ProductCommandService {
     Product product = getProduct(productId);
     Category category = getCategory(request.getCategoryId());
     product.update(request, category);
+
+    productRedisRepository.addProductToPriceSortedSet(productId, product.getPrice());
     return ProductResponse.from(product);
   }
 
@@ -44,6 +49,7 @@ public class ProductCommandService {
       throw new CustomException(ErrorCode.PRODUCT_CANNOT_BE_DELETED);
     }
     productRepository.delete(product);
+    productRedisRepository.removeProductSortedSet(productId);
   }
 
   private Product getProduct(Long productId) {
@@ -61,5 +67,4 @@ public class ProductCommandService {
     return categoryRepository.findById(categoryId)
         .orElseThrow(() -> new CustomException(ErrorCode.CATEGORY_NOT_FOUND));
   }
-
 }

@@ -6,6 +6,7 @@ import com.dogworld.dogdog.member.domain.Member;
 import com.dogworld.dogdog.member.domain.repository.MemberRepository;
 import com.dogworld.dogdog.product.domain.Product;
 import com.dogworld.dogdog.product.domain.repository.ProductRepository;
+import com.dogworld.dogdog.product.infrastructure.ProductRedisRepository;
 import com.dogworld.dogdog.purchase.domain.repository.PurchaseItemRepository;
 import com.dogworld.dogdog.rating.domain.Rating;
 import com.dogworld.dogdog.rating.domain.repository.RatingRepository;
@@ -28,6 +29,7 @@ public class RatingCommandService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final PurchaseItemRepository purchaseItemRepository;
+    private final ProductRedisRepository productRedisRepository;
 
     public RatingResponse createRating(RatingRequest request, Long productId) {
         Long memberId = request.getMemberId();
@@ -39,8 +41,9 @@ public class RatingCommandService {
         Rating createRating = Rating.create(request, member, product);
         ratingRepository.saveAndFlush(createRating);
 
-        updateProductRating(productId, product);
-
+        updateProductRating(product);
+        Product refreshed = productRepository.save(product);
+        updateProductRatingZSet(refreshed);
         return RatingResponse.from(createRating);
     }
 
@@ -60,8 +63,12 @@ public class RatingCommandService {
         }
     }
 
-    private void updateProductRating(Long productId, Product product) {
-        List<Rating> ratings = ratingRepository.findAllByProductIdAndDeletedFalse(productId);
+    private void updateProductRatingZSet(Product product) {
+        productRedisRepository.addProductToRatingSortedSet(product.getId(), product.getRatingAverage());
+    }
+
+    private void updateProductRating(Product product) {
+        List<Rating> ratings = ratingRepository.findAllByProductIdAndDeletedFalse(product.getId());
         int ratingCount = ratings.size();
         product.updateRatingCount(ratingCount);
 
@@ -89,4 +96,3 @@ public class RatingCommandService {
         return sumBD.divide(countBD, 1, RoundingMode.HALF_UP);
     }
 }
-
