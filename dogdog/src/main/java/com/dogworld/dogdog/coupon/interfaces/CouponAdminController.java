@@ -3,6 +3,7 @@ package com.dogworld.dogdog.coupon.interfaces;
 import com.dogworld.dogdog.coupon.application.CouponCommandService;
 import com.dogworld.dogdog.coupon.application.CouponQueryService;
 import com.dogworld.dogdog.coupon.domain.repository.CouponRepository;
+import com.dogworld.dogdog.coupon.interfaces.dto.request.CouponRequest;
 import com.dogworld.dogdog.coupon.interfaces.dto.response.CouponResponse;
 import com.dogworld.dogdog.global.common.response.ApiResponse;
 import jakarta.validation.Valid;
@@ -28,6 +29,7 @@ public class CouponAdminController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<CouponResponse>> createCoupon(@Valid @RequestBody CouponRequest request) {
-        couponCommandService.createCoupon();
+        CouponResponse response = couponCommandService.createCoupon(request);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

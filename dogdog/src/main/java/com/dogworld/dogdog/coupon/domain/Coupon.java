@@ -1,6 +1,7 @@
 package com.dogworld.dogdog.coupon.domain;
 
 import com.dogworld.dogdog.common.domain.BaseEntity;
+import com.dogworld.dogdog.coupon.interfaces.dto.request.CouponRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -62,7 +63,18 @@ public class Coupon extends BaseEntity {
         this.issueCount = issueCount;
     }
 
-//    public static Coupon create() {
-//        return Coupon.builder().build();
-//    }
+    public static Coupon create(CouponRequest request) {
+        return Coupon.builder()
+            .name(request.getName())
+            .discountType(request.getDiscountType())
+            .discountValue(request.getDiscountValue())
+            .minOrderAmount(request.getMinOrderAmount())
+            .maxDiscountAmount(request.getMaxOrderAmount())
+            .startDate(request.getStartDate())
+            .endDate(request.getEndDate())
+            .usageLimit(request.getUsageLimit())
+            .issueCount(request.getIssueCount())
+            .build();
+    }
+
 }

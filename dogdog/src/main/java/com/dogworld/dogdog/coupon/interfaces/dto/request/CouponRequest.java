@@ -3,6 +3,7 @@ package com.dogworld.dogdog.coupon.interfaces.dto.request;
 import com.dogworld.dogdog.coupon.domain.CouponType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,9 +32,9 @@ public class CouponRequest {
 
     private BigDecimal maxOrderAmount;
 
-    private LocalDate startDate;
+    private LocalDateTime startDate;
 
-    private LocalDate endDate;
+    private LocalDateTime endDate;
 
     @NotNull
     private int usageLimit;
